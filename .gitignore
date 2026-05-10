@@ -1,1 +1,31 @@
+# Build
 *.zip
+
+# Editor
+.helix/
+.vscode/
+.idea/
+.swp
+.swo
+.swn
+*~
+4913
+tags
+*.sublime*/
+*.sublime*
+.history/
+
+# Lua (for tests)
+.luarc
+lua_modules/
+*.rock
+*.install
+
+# Secrets
+.env*
+*.env*
+
+# OS
+.DS_Store
+thumbs.db
+desktop.ini
