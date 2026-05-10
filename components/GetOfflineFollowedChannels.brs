@@ -19,7 +19,7 @@ end function
 
 function getSearchResults() as Object
     current_user_info = GETJSON("https://api.twitch.tv/helix/users?login=" + m.top.loginRequested)
-    followed_streamers = GETJSON("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id)
+    followed_streamers = GETJSON("https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + current_user_info.data[0].id)
     addedUsers = 0
     totalUsers = followed_streamers.total
     appended = false
@@ -29,12 +29,12 @@ function getSearchResults() as Object
     while true
         for each streamer in followed_streamers.data
             appended = false
-            if not m.top.currentlyLiveStreamerIds.DoesExist(streamer.to_id)
+            if not m.top.currentlyLiveStreamerIds.DoesExist(streamer.broadcaster_id)
                 if addedUsers = 0
-                    streamer_info_url += "?id=" + streamer.to_id
+                    streamer_info_url += "?id=" + streamer.broadcaster_id
                     addedUsers += 1
                 else if addedUsers < 100
-                    streamer_info_url += "&id=" + streamer.to_id
+                    streamer_info_url += "&id=" + streamer.broadcaster_id
                     addedUsers += 1
                 end if
             end if
@@ -54,8 +54,8 @@ function getSearchResults() as Object
         end for
         'addedUsers = 0
         if followed_streamers.pagination.cursor <> invalid
-            '? "GetOfflineFollowedChannels > next > " "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor
-            followed_streamers = GETJSON("https://api.twitch.tv/helix/users/follows?first=100&from_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor)
+            '? "GetOfflineFollowedChannels > next > " "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor
+            followed_streamers = GETJSON("https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + current_user_info.data[0].id + "&after=" + followed_streamers.pagination.cursor)
         else
             if appended = false
                 '? "GetOfflineFollowedChannels > last round > " streamer_info_url

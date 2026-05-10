@@ -119,7 +119,7 @@ function getSearchResults() as Object
 
     url2 = createUrl()
 
-    user_follows_url = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + result.id
+    user_follows_url = "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + result.id
     url2.SetUrl(user_follows_url.EncodeUri())
     response_string = url2.GetToString()
     search = ParseJson(response_string)
@@ -153,7 +153,7 @@ function getSearchResults() as Object
                     result.followed_users.SortBy("viewer_count", "r")
                     return result
                 end if
-                user_follows_url = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + result.id + "&after=" + search.pagination.cursor
+                user_follows_url = "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + result.id + "&after=" + search.pagination.cursor
                 url2.SetUrl(user_follows_url.EncodeUri())
                 response_string = url2.GetToString()
                 search = ParseJson(response_string)
@@ -161,7 +161,7 @@ function getSearchResults() as Object
             actually_added_followed_user = false
             actually_streaming_url = "https://api.twitch.tv/helix/streams?first=100"
             for each followed_user in search.data
-                actually_streaming_url += "&user_id=" + followed_user.to_id
+                actually_streaming_url += "&user_id=" + followed_user.broadcaster_id
                 actually_added_followed_user = true
                 current += 1
             end for
